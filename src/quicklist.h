@@ -67,13 +67,13 @@ typedef struct quicklistEntry{
 #define quicklistNodeIsCompressed(node) ((node) >encoding == QUICKLIST_NODE_ENCODING_LZF) 
 
 quicklist *quicklistCreate(void);
-quicklist *quiclistNew(int fill, int compress);
+quicklist *quicklistNew(int fill, int compress);
 void quicklistSetCompressDepth(quicklist *quicklist, int depth);
 void quicklistSetFill(quicklist *quicklist, int fill);
 void quicklistSetOptions(quicklist *quicklist, int fill, int depth);
 void quicklistRelease(quicklist *quicklist);
-void quicklistPushHead(quicklist *quicklist, void *value, const size_t sz);
-void quicklistPushTail(quicklist *quicklist, void *value, const size_t sz);
+int quicklistPushHead(quicklist *quicklist, void *value, const size_t sz);
+int quicklistPushTail(quicklist *quicklist, void *value, const size_t sz);
 void quicklistPush(quicklist *quicklist, void *value, const size_t sz, int where);
 void quicklistAppendZiplist(quicklist *quicklist, unsigned char *zl);
 quicklist *quicklistAppendValuesFromZiplist(quicklist *quicklist, unsigned char *zl);
@@ -101,9 +101,9 @@ void quicklistRewind(quicklist *quicklist, quicklistIter *li);
 void quicklistRewindTail(quicklist *quicklist, quicklistIter *li);
 
 void quicklistRotate(quicklist *quicklist);
-void quicklistPopCustom(quicklist *quicklist, int where, unsigned char **data, unsigned int *sz, long long *sval, void *(*saver)(unsigned char *data,unsigned int sz));
+int quicklistPopCustom(quicklist *quicklist, int where, unsigned char **data, unsigned int *sz, long long *sval, void *(*saver)(unsigned char *data,unsigned int sz));
 
-void quicklistPop(quicklist *quicklist, int where, unsigned char **data, unsigned int *sz, long long *slong);
+int quicklistPop(quicklist *quicklist, int where, unsigned char **data, unsigned int *sz, long long *slong);
 unsigned int quicklistCount(const quicklist *ql);
 int quicklistCompare(unsigned char *p1, unsigned char *p2, int p2_len);
 size_t quicklistGetLzf(const quicklistNode *node, void **data);

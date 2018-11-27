@@ -38,6 +38,8 @@ typedef long long mstime_t;
 #include "sparkline.h"
 #include "quicklist.h"
 
+#include "rax.h"
+
 #include "zipmap.h"
 #include "sha1.h"
 #include "endianconv.h"
