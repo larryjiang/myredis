@@ -46,7 +46,7 @@ void latencyMonitorInit(void){
 };
 
 void latencyAddSample(char *event, mstime_t latency){
-    struct latencyTimeSeries *ts = dictFetchValue(server.latency_events,events);
+    struct latencyTimeSeries *ts = dictFetchValue(server.latency_events,event);
     time_t now = time(NULL);
     int prev;
     
@@ -86,7 +86,7 @@ int latencyResetEvent(char *event_to_reset){
     while((de = dictNext(di)) != NULL){
         char *event = dictGetKey(de);
         if(event_to_reset == NULL || strcasecmp(event, event_to_reset) == 0){
-            dictDelete(server.latency,event);
+            dictDelete(server.latency_events,event);
             resets++;
         };
     };
@@ -417,7 +417,7 @@ sds latencyCommandGenSparkeline(char *event, struct latencyTimeSeries *ts){
     sds graph = sdsempty();
     uint32_t min = 0, max = 0;
     for(j = 0; j < LATENCY_TS_LEN; j++){
-        int i = (t->idx + j) % LATENCY_TS_LEN;
+        int i = (ts->idx + j) % LATENCY_TS_LEN;
         int elapsed;
         char buf[64];
         
@@ -438,7 +438,7 @@ sds latencyCommandGenSparkeline(char *event, struct latencyTimeSeries *ts){
         }else if(elapsed < 3600 * 24){
             snprintf(buf,sizeof(buf),"%dh",elapsed/3600);
         }else{
-            snprintf(buf,sizeof(buf),"%dd",elapsed/(3600 * 24)));
+            snprintf(buf,sizeof(buf),"%dd",elapsed/(3600 * 24));
         };
         sparklineSequenceAddSample(seq,ts->samples[i].latency,buf);
     };
@@ -474,7 +474,7 @@ void latencyCommand(client *c){
         event = dictGetKey(de);
         
         graph = latencyCommandGenSparkeline(event,ts);
-        addReplyBulkCBuffer(c,graph);
+        addReplyBulkCString(c,graph);
         sdsfree(graph);
     }else if(!strcasecmp(c->argv[1]->ptr, "latest") && c->argc == 2){
         latencyCommandReplyWithLatestEvents(c);

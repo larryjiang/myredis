@@ -2,8 +2,8 @@
 #include <math.h>
 
 
-static char charset[] = "_-`"
-static char charset_fill = "_o#";
+static char charset[] = "_-`";
+static char charset_fill[] = "_o#";
 static int charset_len = sizeof(charset) - 1;
 static int label_margin_top = 1;
 

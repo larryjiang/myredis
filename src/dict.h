@@ -106,7 +106,7 @@ typedef void (dictScanBucketFunction)(void *privdata, dictEntry **bucketref);
 #define dictGetUnsignedIntegerVal(he) ((he)->v.u64)
 #define dictGetDoubleVal(he) ((he)->v.d)
 #define dictSlots(d) ((d)->ht[0].size + (d)->ht[1].size)
-#define dictSize(d) ((d)->ht[0].used + (d)->ht[2].used)
+#define dictSize(d) ((d)->ht[0].used + (d)->ht[1].used)
 #define dictIsRehashing(d) ((d)->rehashidx != -1)
 /*API*/
 
@@ -127,6 +127,7 @@ int dictResize(dict *d);
 dictIterator *dictGetIterator(dict *d);
 dictIterator *dictGetSafeIterator(dict *d);
 dictEntry *dictNext(dictIterator *iter);
+dictEntry *dictGetRandomKey(dict *d);
 unsigned int dictGetSomeKeys(dict *d, dictEntry **des,unsigned int count);
 void dictReleaseIterator(dictIterator *iter);
 void dictGetStats(char *buf, size_t bufsize, dict *d);

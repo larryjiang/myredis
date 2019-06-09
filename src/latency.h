@@ -6,28 +6,24 @@
 struct latencySample{
     int32_t time;
     int32_t latency;
-}
+};
 
 struct latencyTimeSeries{
     int idx;
     uint32_t max;
     struct latencySample samples[LATENCY_TS_LEN];
-}
+};
 
 
 struct latencyStats{
     uint32_t all_time_high;
-    uint32_t avg;
-    uint32_t min;
-    uint32_t max;
-    uint32_t mad;
-    uint32_t samples;
-    time_t period;
+    uint32_t avg; uint32_t min;
+    uint32_t max; uint32_t mad; uint32_t samples; time_t period;
 };
 
 void latencyMonitorInit(void);
 void latencyAddSample(char *event, mstime_t latency);
-void THPIsEnabled(void);
+int THPIsEnabled(void);
 
 
 #define latencyStartMonitor(var) if (server.latency_monitor_threshold) { \
